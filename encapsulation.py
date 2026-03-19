@@ -8,6 +8,6 @@ class Ride:
         if distance > 0:
             self.__distance = distance
 
-r= Ride("biki", 3)
+r= Ride("bikii", 4)
 print(f"the distance for {r.user} is {r.get_distance()}")
 

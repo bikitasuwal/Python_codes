@@ -17,7 +17,7 @@ class CarRide(Ride):
     def fare(self):
         print("this is car fare", self.distance*100)
 
-r1 = BikeRide("biki", 10)
+r1 = BikeRide("bikita", 10)
 r1.fare()
-r2= CarRide("bikita", 20)
+r2= CarRide("biki", 20)
 r2.fare()
