@@ -1,29 +1,70 @@
-class FoodOrder:
-    def __init__(self, name, item, price):
-        self.name = name
-        self.price = price
-        self.item = item
-    def show_order(self):
-        print("Name:{}".format(self.name))
-        print("Price:{}".format(self.price))
+class Restaurant:
+    #class variable
+    menu = {
+        "pizza": 500,
+        "burger": 600,
+        "pasta": 400,
+        "salad": 300,
+    }
+    def __init__(self, customer_name):
+        #object attributes
+        self.customer_name = customer_name
+        self.order = [] #k order garyo
+        self.order_summary = {} #kati ota garyo
+        self.discount = 0
+    #order process for customer
+    def place_order(self, item, quantity):
+        if item in Restaurant.menu:
+            price = Restaurant.menu[item] * quantity
+            order = (item, quantity, price)
+            self.order.append(order)
+            #update dictionary
+            self.order_summary[item] = order = self.order_summary.get(item, 0)+quantity
+            print(f"{self.customer_name} ordered{quantity} X {item}")
+            print("order placed successfully")
+        else:
+            print(f"sorry {item} is not available in the menu")
 
-order1 = FoodOrder("biki", "pizza", 500)
-order2 = FoodOrder("bikiii", "pizza", 400)
-print(order1.name,order2.price)
-order1.show_order()
+    #apply discount
+    def apply_discount(self, percent):
+        self.discount = percent
+        print(f"A discount of {percent}% has been applied for {self.customer_name}")
 
-'''inside class : only define methods and attributes
-outside class : call methods, define and use objects'''
+    #calculate the bill
+    def calculate_total(self):
+        total_func =  lambda order : order [2] #lambda func to get price
+        total = sum(total_func(order) for order in self.order)
+        if self.discount>0:
+            total = total - (total * self.discount/100)
+        return total
 
-class Laptop:
-    def __init__(self, brand, price):
-        self.brand = brand
-        self.price = price
-    def show_details(self):
-        print("Brand:{}".format(self.brand))
-        print("Price:{}".format(self.price))
+    #unique items ordered using set
+    def unique_items_ordered(self):
+        return set(item[0] for item in self.order)
 
-laptop1 = Laptop("dell", 50000)
-laptop2 = Laptop("lenovo", 50000)
-laptop1.show_details()
-laptop2.show_details()
+    #show order summary
+    def show_summary(self):
+        print("\n------ Order Summary for", self.customer_name, "------")
+        print("Item-wise quantity (dictionary):", self.order_summary)
+        print("Unique items ordered (set):", self.unique_items_ordered())
+        print("Discount applied:", self.discount, "%")
+        print("Total bill after discount:", self.calculate_total(), "INR")
+        print("--------------------------------------\n")
+
+# Create customers
+customer1 = Restaurant("Bikita")
+customer2 = Restaurant("biki")
+
+# Place orders
+customer1.place_order("pizza", 2)
+customer1.place_order("salad", 4)
+customer1.apply_discount(10)  # Apply 10% discount
+
+customer2.place_order("burger", 2)
+customer2.place_order("pasta", 1)
+customer2.apply_discount(5)   # Apply 5% discount
+
+# Show summaries
+customer1.show_summary()
+customer2.show_summary()
+
